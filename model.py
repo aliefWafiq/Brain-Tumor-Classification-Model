@@ -15,7 +15,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing import image
 from sklearn.model_selection import train_test_split
 
-dataset = "F:\\4.SEKOLAH\\2. SIC\\New folder\\Brain Tumor Data Set"
+dataset = "F:\\4.SEKOLAH\\2. SIC\\Brain Tumor Classification Model\\Brain Tumor Data Set"
 list_label = ['Healthy', 'Brain_Tumor']
 list_folder = ['train', 'test', 'val']
 
@@ -36,7 +36,10 @@ for folder in list_folder:
 
 img_df = pd.DataFrame({'images': image_path, 'labels': labels})
 
-train_df, test_df = train_test_split(img_df, test_size=0.2,stratify=img_df['labels'], random_state=42)
+if not img_df.empty:
+    train_df, test_df = train_test_split(img_df, test_size=0.2,stratify=img_df['labels'], random_state=42)
+else:
+    print("data kosong")
 
 train_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
     rescale=1./255,
@@ -58,7 +61,7 @@ train_generator = train_datagen.flow_from_dataframe(
 )
 
 test_generator = test_datagen.flow_from_dataframe(
-    train_df,
+    test_df,
     x_col='images',
     y_col='labels',
     target_size=(150,150),
@@ -94,6 +97,9 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
 
-model.summary()
+# model.summary()
 
-history_cnn = model.fit(train_generator, validation_data=test_generator, epochs=10)
+# train model
+# history_cnn = model.fit(train_generator, validation_data=test_generator, epochs=10)
+
+model.save('model.h5')
