@@ -18,8 +18,8 @@ model = tf.keras.models.load_model('model.h5')
 prediction = model.predict(img_array)
 
 if prediction[0] > 0.5:
-    print("The image is a brain tumor.")
+    print("The image is not a brain tumor.")
     print(prediction[0][0])
 else:
     print(prediction[0][0])
-    print("The image is not a brain tumor.")
+    print("The image is a brain tumor.")

@@ -95,7 +95,7 @@ model.add(tf.keras.layers.Dropout(0.3))
 model.add(tf.keras.layers.Dense(128, activation='relu'))
 model.add(tf.keras.layers.Dense(1, activation='sigmoid'))
 
-learning_rate = 0.01
+learning_rate = 0.001
 optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
 
 model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
@@ -103,7 +103,7 @@ model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accurac
 # model.summary()
 
 # train model
-history = model.fit(train_generator, validation_data=test_generator, epochs=7)
+history = model.fit(train_generator, validation_data=test_generator, epochs=40)
 
 # Grafik Akurasi
 plt.plot(history.history['accuracy'], label='Train Accuracy')
