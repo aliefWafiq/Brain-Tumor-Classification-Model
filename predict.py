@@ -6,18 +6,18 @@ from werkzeug.utils import secure_filename
 import numpy as np
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import shutil
 
-try:
-    import shutil
-    shutil.rmtree('uploaded / image')
-    print()
-except:
-    pass
+UPLOAD_FOLDER = 'uploaded\\image'
+if os.path.exists(UPLOAD_FOLDER):
+    shutil.rmtree(UPLOAD_FOLDER)
+
+os.mkdir(UPLOAD_FOLDER)
 
 model = tf.keras.models.load_model('model.h5')
 app = Flask(__name__)
 
-app.config['UPLOAD_FOLDER'] = 'uploaded / image'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def upload_f():
@@ -30,20 +30,23 @@ def finds():
     test_generator = test_datagen.flow_from_directory(
         test_dir, 
         target_size = (224,224),
-        Color_mode = "rgb",
+        color_mode = "rgb",
         shuffle = False,
         class_mode = 'categorical',
         batch_size = 1)
     
-    prediction = model.predict_generator(test_generator)
+    prediction = model.predict(test_generator)
     print(prediction)
-    return str(vals[np.argmax(prediction)])
+    if prediction[0][0] > 0.5:
+        return str(vals[0])
+    else:
+        return str(vals[1])
 
-@app.route('/upload', methods['GET', 'POST'])
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         f = request.files['file']
-        f.save(os.path.jooin(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
         val = finds()
         return render_template('index.html', ss = val)
 
