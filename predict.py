@@ -48,7 +48,7 @@ def upload_file():
         f = request.files['file']
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
         val = finds()
-        return render_template('index.html', ss = val)
+        return render_template('index.html', ss = val, your_image = f.filename)
 
 if __name__ == '__main__':
     app.run()
