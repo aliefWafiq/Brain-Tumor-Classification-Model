@@ -15,7 +15,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing import image
 from sklearn.model_selection import train_test_split
 
-dataset = "F:\\4.SEKOLAH\\2. SIC\\Brain Tumor Classification Model\\Brain Tumor Data Set"
+dataset = "path"
 list_label = ['Healthy', 'Brain_Tumor']
 list_folder = ['train', 'test', 'val']
 
